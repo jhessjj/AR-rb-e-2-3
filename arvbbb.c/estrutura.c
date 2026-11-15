@@ -1,13 +1,16 @@
+#ifndef ESTRUTURA_BB_H
+#define ESTRUTURA_BB_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 typedef struct Musica {
     char titulo[100];
     int minutos;
     struct Musica *esq, *dir;
 } Musica;
+typedef Musica* ArvMusica;
 
 
 typedef struct Album {
@@ -17,6 +20,7 @@ typedef struct Album {
     Musica *musicas;          
     struct Album *esq, *dir;
 } Album;
+typedef Album* ArvAlbum;
 
 
 typedef struct Artista {
@@ -27,6 +31,7 @@ typedef struct Artista {
     Album *albuns;   
     struct Artista *esq, *dir;
 } Artista;
+typedef Artista* ArvArtista;
 
 
 typedef struct MusicaPlaylist {
@@ -35,9 +40,13 @@ typedef struct MusicaPlaylist {
     char titulo[100];
     struct MusicaPlaylist *esq, *dir;
 } MusicaPlaylist;
+typedef MusicaPlaylist* ArvMusicaPlaylist;
 
 typedef struct Playlist {
     char nome[100];
     MusicaPlaylist *musicas;  
     struct Playlist *esq, *dir;
 } Playlist;
+typedef Playlist* ArvPlaylist;
+
+#endif
