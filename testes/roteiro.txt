@@ -1,0 +1,106 @@
+1
+Queen
+banda
+rock
+1
+Queen
+banda
+rock
+1
+Adele
+solo
+pop
+2
+Queen
+A Night at the Opera
+1975
+2
+Queen
+A Night at the Opera
+1975
+2
+Fantasma
+X
+2000
+2
+Queen
+Jazz
+1978
+3
+Queen
+Jazz
+Bicycle Race
+3
+3
+Queen
+Jazz
+Bicycle Race
+3
+3
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+6
+3
+Queen
+Nada
+Teste
+1
+3
+Fantasma
+Jazz
+Teste
+1
+4
+5
+Queen
+1975
+5
+Queen
+1999
+6
+Bohemian Rhapsody
+6
+Inexistente
+7
+Rock
+7
+Rock
+8
+Rock
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+8
+Rock
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+8
+Rock
+Queen
+Jazz
+Bicycle Race
+8
+Rock
+Queen
+Jazz
+Musica Falsa
+9
+Rock
+11
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+10
+Rock
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+11
+Queen
+A Night at the Opera
+Bohemian Rhapsody
+9
+Rock
+0

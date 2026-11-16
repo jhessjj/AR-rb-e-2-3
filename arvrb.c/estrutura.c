@@ -1,3 +1,10 @@
+#ifndef ESTRUTURA_RB_H
+#define ESTRUTURA_RB_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define RED   1
 #define BLACK 0
 
@@ -7,6 +14,7 @@ typedef struct MusicaRB {
     int cor;                      // novo
     struct MusicaRB *esq, *dir;
 } MusicaRB;
+typedef MusicaRB* ArvMusicaRB;
 
 typedef struct AlbumRB {
     char titulo[100];
@@ -16,6 +24,7 @@ typedef struct AlbumRB {
     int cor;                      
     struct AlbumRB *esq, *dir;
 } AlbumRB;
+typedef AlbumRB* ArvAlbumRB;
 
 typedef struct ArtistaRB {
     char nome[100];
@@ -26,6 +35,7 @@ typedef struct ArtistaRB {
     int cor;                      
     struct ArtistaRB *esq, *dir;
 } ArtistaRB;
+typedef ArtistaRB* ArvArtistaRB;
 
 typedef struct MusicaPlaylistRB {
     char artista[100];
@@ -34,6 +44,7 @@ typedef struct MusicaPlaylistRB {
     int cor;                      
     struct MusicaPlaylistRB *esq, *dir;
 } MusicaPlaylistRB;
+typedef MusicaPlaylistRB* ArvMusicaPlaylistRB;
 
 typedef struct PlaylistRB {
     char nome[100];
@@ -41,3 +52,6 @@ typedef struct PlaylistRB {
     int cor;                      
     struct PlaylistRB *esq, *dir;
 } PlaylistRB;
+typedef PlaylistRB* ArvPlaylistRB;
+
+#endif

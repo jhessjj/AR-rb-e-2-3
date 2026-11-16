@@ -1,0 +1,230 @@
+# Biblioteca de Música: árvores binária, AVL e rubro-negra
+
+Trabalho de Estruturas de Dados II. Este arquivo explica **como compilar, como testar e como saber se o resultado está certo**.
+
+## 1. Como o projeto está organizado
+
+```
+trabalho/
+├── arvbbb.c/     exercício 1: árvore binária
+├── arvAvl.c/     exercício 2: árvore AVL
+├── arvrb.c/      exercício 3: árvore rubro-negra
+├── contador/     contador.h (conta os passos, usado no exercício 4)
+├── analise/      analise.c (exercício 4)
+├── testes/       roteiro.txt (respostas prontas para testar o menu)
+└── README.md
+```
+
+Dentro de cada pasta de árvore:
+
+| Arquivo | Para que serve |
+|---|---|
+| `estrutura.c` | só as structs (artista, álbum, música, playlist) |
+| `artista.h` | funções de artista |
+| `album.h` | funções de álbum |
+| `musica.h` | funções de música |
+| `playlist.h` | funções de playlist e a regra de remoção do item x |
+| `main.c` | o menu |
+
+**Só o `main.c` é compilado.** Os outros arquivos entram por `#include`.
+
+## 2. O que você precisa
+
+Um compilador de C (`gcc`). Para conferir, abra o PowerShell e digite:
+
+```
+gcc --version
+```
+
+Se aparecer a versão, está tudo certo. Se aparecer "não reconhecido", instale o MinGW-w64 (ou o MSYS2) e adicione a pasta `bin` dele ao PATH do Windows.
+
+## 3. Teste 1: compilar e rodar o exercício 1
+
+1. Abra o PowerShell na pasta da árvore. Exemplo (troque pelo seu caminho):
+   ```
+   cd "C:\Users\SEU_USUARIO\trabalho 3 ed2\arvbbb.c"
+   ```
+2. Compile:
+   ```
+   gcc main.c -o app.exe
+   ```
+   Se não aparecer nada, compilou. Vai surgir o arquivo `app.exe`.
+3. Rode:
+   ```
+   .\app.exe
+   ```
+
+Você verá o menu:
+
+```
+========== BIBLIOTECA DE MUSICA (Arvore Binaria) ==========
+ 1 - Cadastrar artista
+ 2 - Cadastrar album
+ ...
+ 0 - Sair
+Opcao:
+```
+
+Digite `1` e Enter, e responda as perguntas. Uma sessão fica assim:
+
+```
+Opcao: 1
+Nome do artista: Queen
+Tipo (cantor, dupla, banda...): banda
+Estilo musical: rock
+Artista cadastrado!
+```
+
+Para sair, digite `0`. Sair pela opção 0 libera a memória.
+
+## 4. Teste 2: roteiro automático
+
+Em vez de digitar tudo, use o arquivo `testes/roteiro.txt`, que tem todas as respostas na ordem.
+
+No **PowerShell**:
+
+```
+Get-Content ..\testes\roteiro.txt | .\app.exe
+```
+
+No **Prompt de Comando (cmd)**:
+
+```
+app.exe < ..\testes\roteiro.txt
+```
+
+No PowerShell o símbolo `<` não funciona, por isso o `Get-Content`.
+
+Como as respostas vêm do arquivo, as perguntas e as mensagens aparecem coladas na mesma linha. Isso é normal. O que importa são as mensagens finais de cada operação.
+
+## 5. O que deve aparecer
+
+O roteiro gera **33 mensagens**, nesta ordem. Se a sua saída tiver todas, na mesma ordem, o exercício está funcionando.
+
+| Nº | Mensagem | O que está sendo testado |
+|---|---|---|
+| 1 | `Artista cadastrado!` | cadastrar Queen (item i) |
+| 2 | `Nao foi possivel cadastrar: artista ja existe.` | repetido recusado |
+| 3 | `Artista cadastrado!` | cadastrar Adele |
+| 4 | `Album cadastrado!` | álbum de artista existente (item ii) |
+| 5 | `Esse artista ja tem um album com esse titulo.` | álbum repetido recusado |
+| 6 | `Artista nao cadastrado.` | álbum de artista que não existe |
+| 7 | `Album cadastrado!` | segundo álbum do Queen |
+| 8 | `Musica cadastrada!` | música em álbum existente (item iii) |
+| 9 | `Esse album ja tem uma musica com esse titulo.` | música repetida recusada |
+| 10 | `Musica cadastrada!` | segunda música |
+| 11 | `Album nao cadastrado para esse artista.` | música em álbum inexistente |
+| 12 | `Artista nao cadastrado.` | música de artista inexistente |
+| 13 | `Adele \| solo \| pop \| 0 album(ns)` | mostrar artistas (item iv), em ordem alfabética |
+| 14 | `Queen \| banda \| rock \| 2 album(ns)` | continuação do item iv |
+| 15 | `A Night at the Opera \| 1975 \| 1 musica(s)` | álbuns de um ano (item v) |
+| 16 | `Nenhum album desse artista em 1999.` | ano sem álbuns |
+| 17 | `Musica : Bohemian Rhapsody (6 min)` | dados de uma música (item vi) |
+| 18 | `Musica nao encontrada.` | música que não existe |
+| 19 | `Playlist criada!` | criar playlist (item vii) |
+| 20 | `Ja existe uma playlist com esse nome.` | playlist repetida recusada |
+| 21 | `Musica adicionada a playlist!` | adicionar música à playlist |
+| 22 | `Essa musica ja esta na playlist.` | repetida na playlist |
+| 23 | `Musica adicionada a playlist!` | segunda música na playlist |
+| 24 | `Musica nao cadastrada nesse album.` | música falsa recusada |
+| 25 a 27 | `Playlist: Rock` e as duas músicas | mostrar playlist (item viii) |
+| 28 | `Nao pode remover: a musica faz parte de uma playlist.` | regra do item x |
+| 29 | `Musica removida da playlist!` | remover da playlist (item ix) |
+| 30 | `Musica removida do album!` | agora o item x funciona |
+| 31 e 32 | `Playlist: Rock` e só `Bicycle Race` | a playlist ficou com 1 música |
+| 33 | `Encerrando...` | opção 0 |
+
+## 6. Teste 3: repetir nas outras árvores
+
+Faça exatamente os mesmos passos na AVL e na rubro-negra:
+
+```
+cd ..\arvAvl.c
+gcc main.c -o app.exe
+Get-Content ..\testes\roteiro.txt | .\app.exe
+
+cd ..\arvrb.c
+gcc main.c -o app.exe
+Get-Content ..\testes\roteiro.txt | .\app.exe
+```
+
+As **33 mensagens são as mesmas**. A única diferença é o título do menu (`Arvore AVL`, `Arvore Rubro-Negra`). O comportamento é igual, só mudam as árvores por dentro.
+
+## 7. Teste 4: o exercício 4 (análise)
+
+```
+cd ..\analise
+gcc analise.c -o analise.exe
+.\analise.exe
+```
+
+O programa imprime 3 tabelas e cria dois arquivos na pasta `analise`:
+
+- `insercao.csv`: passos e tempo de cada uma das 900 inserções.
+- `busca.csv`: passos de cada uma das 90 buscas.
+
+Para abrir no Excel: clique com o botão direito no arquivo e escolha **Abrir com > Excel**. Os arquivos usam `;` e vírgula decimal.
+
+### Os números devem ser estes (semente 42)
+
+O passo a passo é determinístico: com a mesma semente, **os passos têm que dar exatamente isto no seu computador**. O tempo varia de máquina para máquina.
+
+Passos totais nas 100 inserções:
+
+| Árvore | Crescente | Decrescente | Aleatória |
+|---|---|---|---|
+| Binária | 5050 | 5050 | 698 |
+| AVL | 1912 | 1912 | 1723 |
+| Rubro-negra | 765 | 981 | 801 |
+
+Níveis da árvore no final:
+
+| Árvore | Crescente | Decrescente | Aleatória |
+|---|---|---|---|
+| Binária | 100 | 100 | 12 |
+| AVL | 7 | 7 | 8 |
+| Rubro-negra | 7 | 9 | 8 |
+
+Passos totais nas 10 buscas:
+
+| Árvore | Crescente | Decrescente | Aleatória |
+|---|---|---|---|
+| Binária | 455 | 555 | 72 |
+| AVL | 60 | 61 | 61 |
+| Rubro-negra | 60 | 63 | 62 |
+
+Duas conferências rápidas:
+
+- Binária crescente: 5050 é a soma de 1 a 100. Cada nome novo desce por todos os anteriores.
+- AVL crescente: `insere` 673, `balanc` 573, `atualiza` 573, `rotacao` 93. Rubro-negra crescente: `insere` 580, `rotacao` 94, `trocaCor` 91.
+
+Se os seus passos forem diferentes com a semente 42, verifique se as linhas `cont.xxx++` estão nos `artista.h` (veja a seção 9).
+
+Para testar com outros dados, use outra semente: `.\analise.exe 7`. Os números mudam, mas o padrão deve se manter: a binária explode nas ordens crescente e decrescente, e a AVL e a rubro-negra não.
+
+## 8. Testes manuais extras
+
+Se quiser testar sozinho, algumas ideias:
+
+| Teste | O que fazer | Resultado esperado |
+|---|---|---|
+| Maiúscula importa | cadastrar `Queen` e depois `queen` | os dois são aceitos (nomes diferentes) |
+| Ordem alfabética | cadastrar `Zeca`, `Ana`, `Mario` e usar a opção 4 | `Ana`, `Mario`, `Zeca` |
+| Playlist vazia | criar playlist e mostrá-la sem músicas | `(playlist vazia)` |
+| Música com mesmo título | cadastrar `Hello` em dois artistas e usar a opção 6 | aparecem as duas |
+| Remover o que não existe | opção 10 com música que não está na playlist | `Essa musica nao esta na playlist.` |
+| Opção inválida | digitar `99` | `Opcao invalida!` |
+
+## 9. Problemas comuns
+
+| Mensagem ou sintoma | Causa e solução |
+|---|---|
+| `gcc` não é reconhecido | o compilador não está instalado ou não está no PATH (seção 2) |
+| `#include nested too deeply` | um `.h` está incluindo ele mesmo, por exemplo `artista.h` com `#include "artista.h"`. Troque por `#include "estrutura.c"` |
+| `unknown type name 'ArvArtista'` | faltam os `typedef` no `estrutura.c`, como `typedef Artista* ArvArtista;` |
+| `multiple definition of ...` | você compilou vários arquivos. Compile só o `main.c` |
+| `fatal error: ../contador/contador.h: No such file` | a pasta `contador` está errada. Deve ter o arquivo `contador.h` dentro dela, e não uma pasta chamada `contador.h` |
+| passos diferentes dos da seção 7 | as linhas `cont.insere++`, `cont.busca++`, etc. não estão no `artista.h` |
+| letras estranhas no terminal | não digite acentos nos nomes |
+| o programa fecha sozinho | no `app.exe` clicado com o mouse a janela fecha ao terminar. Abra pelo PowerShell |
+

@@ -1,63 +1,72 @@
+#ifndef ARTISTA_H_AVL
+#define ARTISTA_H_AVL
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "artista.h"
-
-
-static int altura(ArtistaAVL *No) {
-    if (No == NULL)
-        return -1;
-    return No->altura;
-}
-
-static int maior(int a, int b) {
+#include "estrutura.c"
+#include "../contador/contador.h"
+//SEGUE O ESTILO DA BINARIS
+static int maiorAVL(int a, int b) {
     if (a > b)
         return a;
     return b;
 }
 
-
-static int fatorBalanceamento(ArtistaAVL *No) {
-    return altura(No->esq) - altura(No->dir);
+static int alturaArtistaAVL(ArtistaAVL *No) {
+    if (No == NULL)
+        return -1;
+    return No->altura;
 }
 
-static ArtistaAVL* rotacionaDireita(ArtistaAVL *A) {
+static void atualizaAlturaArtistaAVL(ArtistaAVL **R) {
+    cont.atualizaAltura++;
+    (*R)->altura = 1 + maiorAVL(alturaArtistaAVL((*R)->esq), alturaArtistaAVL((*R)->dir));
+}
+
+static void rotacaoDirArtistaAVL(ArtistaAVL **P) {
+    ArtistaAVL *A = *P;
     ArtistaAVL *B = A->esq;
+    cont.rotacao++;
     A->esq = B->dir;
     B->dir = A;
-    A->altura = 1 + maior(altura(A->esq), altura(A->dir));
-    B->altura = 1 + maior(altura(B->esq), altura(B->dir));
-    return B;
+    A->altura = 1 + maiorAVL(alturaArtistaAVL(A->esq), alturaArtistaAVL(A->dir));
+    B->altura = 1 + maiorAVL(alturaArtistaAVL(B->esq), alturaArtistaAVL(B->dir));
+    *P = B;
 }
 
-static ArtistaAVL* rotacionaEsquerda(ArtistaAVL *A) {
+static void rotacaoEsqArtistaAVL(ArtistaAVL **P) {
+    ArtistaAVL *A = *P;
     ArtistaAVL *B = A->dir;
+    cont.rotacao++;
     A->dir = B->esq;
     B->esq = A;
-    A->altura = 1 + maior(altura(A->esq), altura(A->dir));
-    B->altura = 1 + maior(altura(B->esq), altura(B->dir));
-    return B;
+    A->altura = 1 + maiorAVL(alturaArtistaAVL(A->esq), alturaArtistaAVL(A->dir));
+    B->altura = 1 + maiorAVL(alturaArtistaAVL(B->esq), alturaArtistaAVL(B->dir));
+    *P = B;
 }
 
-static ArtistaAVL* balancear(ArtistaAVL *H) {
-    int fb;
-    H->altura = 1 + maior(altura(H->esq), altura(H->dir));
-    fb = fatorBalanceamento(H);
+static void balanceamentoArtistaAVL(ArtistaAVL **P) {
+    int fb, fbE, fbD;
+    ArtistaAVL *filhoEsq, *filhoDir;
 
-    if (fb > 1) {                                  
-        if (fatorBalanceamento(H->esq) < 0)        
-            H->esq = rotacionaEsquerda(H->esq);
-        H = rotacionaDireita(H);
+    cont.balanceamento++;
+    fb = alturaArtistaAVL((*P)->esq) - alturaArtistaAVL((*P)->dir);
+    if (fb == 2) {
+        filhoEsq = (*P)->esq;
+        fbE = alturaArtistaAVL(filhoEsq->esq) - alturaArtistaAVL(filhoEsq->dir);
+        if (fbE < 0)
+            rotacaoEsqArtistaAVL(&((*P)->esq));
+        rotacaoDirArtistaAVL(P);
     }
-    else if (fb < -1) {                            
-        if (fatorBalanceamento(H->dir) > 0)        
-            H->dir = rotacionaDireita(H->dir);
-        H = rotacionaEsquerda(H);
+    else if (fb == -2) {
+        filhoDir = (*P)->dir;
+        fbD = alturaArtistaAVL(filhoDir->esq) - alturaArtistaAVL(filhoDir->dir);
+        if (fbD > 0)
+            rotacaoDirArtistaAVL(&((*P)->dir));
+        rotacaoEsqArtistaAVL(P);
     }
-    return H;
 }
-
-
 
 ArvArtistaAVL* criaArvArtistaAVL() {
     ArvArtistaAVL *raiz = (ArvArtistaAVL*) malloc(sizeof(ArvArtistaAVL));
@@ -66,43 +75,79 @@ ArvArtistaAVL* criaArvArtistaAVL() {
     return raiz;
 }
 
-ArtistaAVL* insereArtistaAVL(ArtistaAVL *H, char nome[], char tipo[], char estilo[], int *resp) {
-    ArtistaAVL *novo;
-    int cmp;
 
-    if (H == NULL) {
-        novo = (ArtistaAVL*) malloc(sizeof(ArtistaAVL));
-        if (novo == NULL) {
-            *resp = 0;
-            return NULL;
-        }
-        strcpy(novo->nome, nome);
-        strcpy(novo->tipo, tipo);
-        strcpy(novo->estilo, estilo);
-        novo->numAlbuns = 0;
-        novo->albuns = NULL;
-        novo->altura = 0;                        
-        novo->esq = NULL;
-        novo->dir = NULL;
-        *resp = 1;
-        return novo;
+ArtistaAVL* criaNoArtistaAVL(char nome[], char tipo[], char estilo[]) {
+    ArtistaAVL *No = (ArtistaAVL*) malloc(sizeof(ArtistaAVL));
+    if (No != NULL) {
+        strcpy(No->nome, nome);
+        strcpy(No->tipo, tipo);
+        strcpy(No->estilo, estilo);
+        No->numAlbuns = 0;
+        No->albuns = NULL;
+        No->altura = 0;
+        No->esq = NULL;
+        No->dir = NULL;
     }
-
-    cmp = strcmp(nome, H->nome);
-    if (cmp == 0)
-        *resp = 0;
-    else if (cmp < 0)
-        H->esq = insereArtistaAVL(H->esq, nome, tipo, estilo, resp);
-    else
-        H->dir = insereArtistaAVL(H->dir, nome, tipo, estilo, resp);
-
-    return balancear(H);                          
+    return No;
 }
 
+
+int insereArtistaAVL(ArtistaAVL **R, ArtistaAVL *No) {
+    int cmp, inseriu;
+
+    cont.insere++;
+    if (*R == NULL) {
+        *R = No;
+        return 1;
+    }
+    cmp = strcmp(No->nome, (*R)->nome);
+    if (cmp == 0)
+        return 0;
+    if (cmp < 0)
+        inseriu = insereArtistaAVL(&((*R)->esq), No);
+    else
+        inseriu = insereArtistaAVL(&((*R)->dir), No);
+
+    balanceamentoArtistaAVL(R);
+    atualizaAlturaArtistaAVL(R);
+    return inseriu;
+}
+
+
 int cadastraArtistaAVL(ArvArtistaAVL *raiz, char nome[], char tipo[], char estilo[]) {
+    ArtistaAVL *No;
     int resp;
     if (raiz == NULL)
         return 0;
-    *raiz = insereArtistaAVL(*raiz, nome, tipo, estilo, &resp);
+    No = criaNoArtistaAVL(nome, tipo, estilo);
+    if (No == NULL)
+        return 0;
+    resp = insereArtistaAVL(raiz, No);
+    if (resp == 0)
+        free(No);
     return resp;
 }
+
+ArtistaAVL* buscaArtistaAVL(ArtistaAVL *H, char nome[]) {
+    int cmp;
+    cont.busca++;
+    if (H == NULL)
+        return NULL;
+    cmp = strcmp(nome, H->nome);
+    if (cmp == 0)
+        return H;
+    else if (cmp < 0)
+        return buscaArtistaAVL(H->esq, nome);
+    return buscaArtistaAVL(H->dir, nome);
+}
+
+// mostra todos em ordem alfabetica
+void mostraArtistasAVL(ArtistaAVL *H) {
+    if (H != NULL) {
+        mostraArtistasAVL(H->esq);
+        printf("%s | %s | %s | %d album(ns)\n", H->nome, H->tipo, H->estilo, H->numAlbuns);
+        mostraArtistasAVL(H->dir);
+    }
+}
+
+#endif

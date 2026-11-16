@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "estrutura.c"
-
-
+#include "../contador/contador.h"
 
 ArvArtista* criaArvArtista() {
     ArvArtista *raiz = (ArvArtista*) malloc(sizeof(ArvArtista));
@@ -15,12 +14,12 @@ ArvArtista* criaArvArtista() {
     return raiz;
 }
 
-
 Artista* insereArtista(Artista *H, char nome[], char tipo[], char estilo[], int *resp) {
     Artista *novo;
     int cmp;
 
-    if (H == NULL) {                              
+    cont.insere++;
+    if (H == NULL) {
         novo = (Artista*) malloc(sizeof(Artista));
         if (novo == NULL) {
             *resp = 0;
@@ -39,7 +38,7 @@ Artista* insereArtista(Artista *H, char nome[], char tipo[], char estilo[], int 
 
     cmp = strcmp(nome, H->nome);
     if (cmp == 0)
-        *resp = 0; //repetido                               
+        *resp = 0;
     else if (cmp < 0)
         H->esq = insereArtista(H->esq, nome, tipo, estilo, resp);
     else
@@ -57,9 +56,9 @@ int cadastraArtista(ArvArtista *raiz, char nome[], char tipo[], char estilo[]) {
     return resp;
 }
 
-
 Artista* buscaArtista(Artista *H, char nome[]) {
     int cmp;
+    cont.busca++;
     if (H == NULL)
         return NULL;
     cmp = strcmp(nome, H->nome);
@@ -70,7 +69,7 @@ Artista* buscaArtista(Artista *H, char nome[]) {
     return buscaArtista(H->dir, nome);
 }
 
-//mostra em ordem alfabetica
+// mostra todos em ordem alfabetica
 void mostraArtistas(Artista *H) {
     if (H != NULL) {
         mostraArtistas(H->esq);
